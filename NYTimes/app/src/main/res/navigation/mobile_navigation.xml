@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_science">
+
+    <fragment
+        android:id="@+id/navigation_science"
+        android:name="com.droidco.nytimes.view.ArticlesListFragment"
+        android:label="@string/title_science"
+        tools:layout="@layout/articles_list_fragment">
+
+        <argument
+            android:name="section"
+            android:defaultValue="Science"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_navigation_science_to_articleDetailsFragment"
+            app:destination="@id/articleDetailsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_business"
+        android:name="com.droidco.nytimes.view.ArticlesListFragment"
+        android:label="@string/title_business"
+        tools:layout="@layout/articles_list_fragment">
+
+        <argument
+            android:name="section"
+            android:defaultValue="Business"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_navigation_business_to_articleDetailsFragment"
+            app:destination="@id/articleDetailsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_movies"
+        android:name="com.droidco.nytimes.view.ArticlesListFragment"
+        android:label="@string/title_movies"
+        tools:layout="@layout/articles_list_fragment">
+
+        <argument
+            android:name="section"
+            android:defaultValue="Movies"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_navigation_movies_to_articleDetailsFragment"
+            app:destination="@id/articleDetailsFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/articleDetailsFragment"
+        android:name="com.droidco.nytimes.view.ArticleDetailsFragment"
+        android:label="fragment_article_details"
+        tools:layout="@layout/fragment_article_details" />
+</navigation>
