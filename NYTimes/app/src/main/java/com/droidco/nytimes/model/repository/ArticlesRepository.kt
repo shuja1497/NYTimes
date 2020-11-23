@@ -1,16 +1,42 @@
 package com.droidco.nytimes.model.repository
 
-import com.droidco.nytimes.model.data.ArticlesResponse
+import com.droidco.nytimes.model.data.Article
+import com.droidco.nytimes.model.local.ArticlesLocalDataSource
 import com.droidco.nytimes.model.remote.ArticlesRemoteDataSource
+import io.reactivex.Observable
+import timber.log.Timber
 
 class ArticlesRepository() {
 
-    suspend fun fetchArticles(section: String): ArticlesResponse {
-        return fetchRemoteArticles(section)
+    fun fetchArticles(section: String): Observable<List<Article>> {
+        return Observable.concatArray(
+            fetchLocalArticles(section),
+            fetchRemoteArticles(section)
+        )
     }
 
-    private suspend fun fetchRemoteArticles(section: String): ArticlesResponse {
-        return ArticlesRemoteDataSource.getArticles(section)
+    private fun fetchLocalArticles(section: String): Observable<List<Article>> {
+        return ArticlesLocalDataSource.getArticles(section).filter { it.isNotEmpty() }
+            .toObservable()
+            .doOnNext {
+                Timber.d("Emitting ${it.size} articles from DB...")
+            }
+    }
 
+    private fun fetchRemoteArticles(section: String): Observable<List<Article>> {
+
+        return ArticlesRemoteDataSource.getArticles(section)
+            .map {
+                it.results ?: emptyList<Article>()
+            }
+            .doOnNext {
+                Timber.d("Fetched ${it.size} articles from API...")
+
+                storeArticlesLocally(it)
+            }
+    }
+
+    private fun storeArticlesLocally(articles: List<Article>) {
+        ArticlesLocalDataSource.insertArticles(articles)
     }
 }

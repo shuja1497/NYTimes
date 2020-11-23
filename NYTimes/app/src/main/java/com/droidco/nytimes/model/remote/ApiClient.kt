@@ -18,7 +18,7 @@ object ApiClient {
     private val httpClient = OkHttpClient.Builder()
     private val logging = run {
         HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.BASIC
         }
     }
 

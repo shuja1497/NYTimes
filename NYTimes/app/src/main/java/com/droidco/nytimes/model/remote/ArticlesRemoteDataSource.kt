@@ -3,6 +3,7 @@ package com.droidco.nytimes.model.remote
 import com.droidco.nytimes.model.data.Article
 import com.droidco.nytimes.model.data.ArticlesResponse
 import com.droidco.nytimes.utils.API_KEY
+import io.reactivex.Observable
 import io.reactivex.Single
 
 object ArticlesRemoteDataSource {
@@ -20,7 +21,7 @@ object ArticlesRemoteDataSource {
         return service!!
     }
 
-    suspend fun getArticles(section: String): ArticlesResponse {
+    fun getArticles(section: String): Observable<ArticlesResponse> {
         return getService().getArticles(section, API_KEY)
     }
 }

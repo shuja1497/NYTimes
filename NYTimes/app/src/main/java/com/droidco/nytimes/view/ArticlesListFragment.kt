@@ -1,32 +1,30 @@
 package com.droidco.nytimes.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidco.nytimes.R
 import com.droidco.nytimes.databinding.ArticlesListFragmentBinding
+import com.droidco.nytimes.model.data.ArticleResponse
+import com.droidco.nytimes.model.repository.ArticlesRepository
 import com.droidco.nytimes.viewmodel.ArticlesListViewModel
-import com.droidco.nytimes.viewmodel.ViewModelFactory
-import kotlinx.coroutines.launch
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
+import java.net.ConnectException
+import java.net.UnknownHostException
 
-class ArticlesListFragment : Fragment() {
+class ArticlesListFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = ArticlesListFragment()
-
-        private const val TAG = "ArticlesListFragment"
     }
 
-    private lateinit var viewModel: ArticlesListViewModel
+    private var viewModel = ArticlesListViewModel(ArticlesRepository())
     private val args: ArticlesListFragmentArgs by navArgs()
     private var section: String = ""
     private val adapter = ArticleAdapter(arrayListOf())
@@ -46,47 +44,33 @@ class ArticlesListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         section = args.section
-        Log.d(TAG, "onCreate: SECTION: $section")
+        Timber.d("onCreate: SECTION: $section")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        Log.d(TAG, "onActivityCreated: SECTION: $section")
+        Timber.d("onActivityCreated: SECTION: $section")
 
-        setupViewModel()
         setupUI()
-        setupObservers()
         getArticlesData()
     }
 
     private fun getArticlesData() {
-        lifecycleScope.launch {
+        binding.progressBar.visibility = View.VISIBLE
+
+        subscribe(
             viewModel.getArticles(section)
-        }
-    }
-
-    private fun setupObservers() {
-        viewModel.loading.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.progressBar.visibility = View.VISIBLE
-                binding.errorTv.visibility = View.GONE
-            }
-        })
-
-        viewModel.error.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.progressBar.visibility = View.GONE
-                binding.articlesRv.visibility = View.GONE
-                binding.errorTv.visibility = View.VISIBLE
-            }
-        })
-
-        viewModel.articlesList.observe(viewLifecycleOwner, Observer {
-            binding.articlesRv.visibility = View.VISIBLE
-            binding.progressBar.visibility = View.GONE
-            adapter.addItems(it)
-        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d("Received articles in view ${it.articles.size}")
+                    showArticles(it)
+                }, {
+                    Timber.w(it)
+                    showError()
+                })
+        )
     }
 
     private fun setupUI() {
@@ -95,19 +79,28 @@ class ArticlesListFragment : Fragment() {
         binding.articlesRv.adapter = adapter
     }
 
-    private fun setupViewModel() {
-        //        viewModel = ViewModelProvider(this).get(ArticlesListViewModel::class.java)
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory()
-        )
-            .get(ArticlesListViewModel::class.java)
+    private fun showArticles(articleResponse: ArticleResponse) {
+
+        if (articleResponse.error == null) {
+            binding.articlesRv.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.GONE
+            adapter.addItems(articleResponse.articles)
+        } else if (articleResponse.error is ConnectException || articleResponse.error is UnknownHostException) {
+            Timber.d("Connection error.")
+        } else {
+            showError()
+        }
+    }
+
+    private fun showError() {
+        binding.progressBar.visibility = View.GONE
+        binding.articlesRv.visibility = View.GONE
+        binding.errorTv.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "onDestroy: SECTION: $section")
-
+        Timber.d("onDestroy: SECTION: $section")
     }
 
 }

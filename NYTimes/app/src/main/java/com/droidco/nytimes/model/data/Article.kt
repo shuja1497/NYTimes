@@ -21,6 +21,9 @@ data class Article(
     @SerializedName("abstract")
     val description: String,
 
+    @SerializedName("section")
+    val section: String,
+
     @SerializedName("published_date")
     val publishedDate: String,
 
@@ -28,18 +31,18 @@ data class Article(
     val url: String,
 
     @SerializedName("multimedia")
-    val multimedia: ArrayList<Multimedia>
+    val multimedia: ArrayList<Multimedia>?
 
 ) {
 
 
     fun getThumbnailUrl(): String? {
-        val multimediaResp = this.multimedia.find { it.format == "thumbLarge" }
+        val multimediaResp = this.multimedia?.find { it.format == "thumbLarge" }
         return multimediaResp?.url
     }
 
     fun getBackgroundImage(): String? {
-        val multimediaResp = this.multimedia.find { it.format == "mediumThreeByTwo210" }
+        val multimediaResp = this.multimedia?.find { it.format == "mediumThreeByTwo210" }
         return multimediaResp?.url
     }
 }
