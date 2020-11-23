@@ -22,4 +22,7 @@ interface ArticleDao {
 
     @Query("delete from article where section = :section")
     fun deleteBySection(section: String)
+
+    @Query("select * from article where article_id = :articleId")
+    suspend fun getArticle(articleId: String): Article
 }

@@ -32,7 +32,7 @@ class ArticlesRepository() {
             .doOnNext {
                 Timber.d("Fetched ${it.size} articles from API...")
 
-                storeArticlesLocally(it)
+                storeArticlesLocally(it.filter { article -> article.getArticleId() != null })
             }
     }
 

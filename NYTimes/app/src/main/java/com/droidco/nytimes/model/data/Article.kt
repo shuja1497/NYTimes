@@ -8,9 +8,10 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class Article(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "article_id")
-    val articleId: Int = 0,
+    @SerializedName("short_url")
+    val url: String,
 
     val title: String,
 
@@ -27,14 +28,10 @@ data class Article(
     @SerializedName("published_date")
     val publishedDate: String,
 
-    @SerializedName("short_url")
-    val url: String,
-
     @SerializedName("multimedia")
     val multimedia: ArrayList<Multimedia>?
 
 ) {
-
 
     fun getThumbnailUrl(): String? {
         val multimediaResp = this.multimedia?.find { it.format == "thumbLarge" }
@@ -45,7 +42,11 @@ data class Article(
         val multimediaResp = this.multimedia?.find { it.format == "mediumThreeByTwo210" }
         return multimediaResp?.url
     }
-}
+
+    fun getArticleId () : String {
+        return this.url
+    }
+ }
 
 data class Multimedia(
     val url: String,

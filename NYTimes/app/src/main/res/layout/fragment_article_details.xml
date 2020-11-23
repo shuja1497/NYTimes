@@ -1,13 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.ArticleDetailsFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
-</androidx.core.widget.NestedScrollView>
+    <data>
+
+        <variable
+            name="article"
+            type="com.droidco.nytimes.model.data.Article" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black">
+
+        <ImageView
+            android:id="@+id/backgroundImageIv"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/article_bg_height"
+            android:scaleType="centerCrop"
+            app:imagePlaceHolder="@{@drawable/article_bg_placeholder}"
+            app:imageUrl="@{article.backgroundImage}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/articleTitleTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:paddingHorizontal="@dimen/card_padding"
+            android:textColor="@color/white"
+            android:textSize="@dimen/article_title_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backgroundImageIv"
+            app:setText="@{article.title}"
+            tools:text="Article title" />
+
+        <ImageView
+            android:id="@+id/iconAuthorIv"
+            android:layout_width="@dimen/icon_dimen"
+            android:layout_height="@dimen/icon_dimen"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:src="@drawable/icon_author"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/articleTitleTv" />
+
+        <TextView
+            android:id="@+id/authorTitleTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iconAuthorIv"
+            app:layout_constraintTop_toTopOf="@+id/iconAuthorIv"
+            app:setText="@{article.authorName}"
+            tools:text="Author name " />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/authorBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="authorTitleTv, iconAuthorIv" />
+
+        <ImageView
+            android:id="@+id/iconPublishedDateIv"
+            android:layout_width="@dimen/icon_dimen"
+            android:layout_height="@dimen/icon_dimen"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:src="@drawable/icon_published_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/authorBarrier" />
+
+        <TextView
+            android:id="@+id/publishedDateTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iconPublishedDateIv"
+            app:layout_constraintTop_toTopOf="@+id/iconPublishedDateIv"
+            app:setText="@{article.publishedDate}"
+            tools:text="Published on 17 jan, 2020 " />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/publishedDateBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="publishedDateTv, iconPublishedDateIv" />
+
+        <ImageView
+            android:id="@+id/iconUrlIv"
+            android:layout_width="@dimen/icon_dimen"
+            android:layout_height="@dimen/icon_dimen"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:padding="2dp"
+            android:src="@drawable/icon_url"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/publishedDateBarrier" />
+
+        <TextView
+            android:id="@+id/urlTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:autoLink="web"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iconUrlIv"
+            app:layout_constraintTop_toTopOf="@+id/iconUrlIv"
+            app:setText="@{article.url}"
+            tools:text="http.google.com" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/urlBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="urlTv, iconUrlIv"
+            tools:layout_editor_absoluteY="360dp" />
+
+        <TextView
+            android:id="@+id/descriptionTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/urlBarrier"
+            app:setText="@{article.description}"
+            tools:text="Description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

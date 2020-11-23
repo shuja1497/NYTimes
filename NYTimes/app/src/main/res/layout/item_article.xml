@@ -8,6 +8,10 @@
         <variable
             name="article"
             type="com.droidco.nytimes.model.data.Article" />
+
+        <variable
+            name="card"
+            type="com.droidco.nytimes.view.ArticleViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +21,7 @@
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:background="@color/cardview_light_background"
+        android:onClick="@{(view) -> card.onArticleClick(view, article)}"
         android:padding="@dimen/card_padding">
 
         <TextView

@@ -16,7 +16,7 @@
             android:defaultValue="Science"
             app:argType="string" />
         <action
-            android:id="@+id/action_navigation_science_to_articleDetailsFragment"
+            android:id="@+id/action_navigation_list_to_articleDetailsFragment"
             app:destination="@id/articleDetailsFragment" />
 
     </fragment>
@@ -32,7 +32,7 @@
             android:defaultValue="Business"
             app:argType="string" />
         <action
-            android:id="@+id/action_navigation_business_to_articleDetailsFragment"
+            android:id="@+id/action_navigation_list_to_articleDetailsFragment"
             app:destination="@id/articleDetailsFragment" />
 
     </fragment>
@@ -48,7 +48,7 @@
             android:defaultValue="Movies"
             app:argType="string" />
         <action
-            android:id="@+id/action_navigation_movies_to_articleDetailsFragment"
+            android:id="@+id/action_navigation_list_to_articleDetailsFragment"
             app:destination="@id/articleDetailsFragment" />
 
     </fragment>
@@ -56,5 +56,12 @@
         android:id="@+id/articleDetailsFragment"
         android:name="com.droidco.nytimes.view.ArticleDetailsFragment"
         android:label="fragment_article_details"
-        tools:layout="@layout/fragment_article_details" />
+        tools:layout="@layout/fragment_article_details">
+
+        <argument
+            android:name="articleId"
+            android:defaultValue="0"
+            app:argType="string" />
+
+    </fragment>
 </navigation>

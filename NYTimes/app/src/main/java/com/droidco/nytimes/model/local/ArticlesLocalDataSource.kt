@@ -21,15 +21,24 @@ object ArticlesLocalDataSource {
 
     @SuppressLint("CheckResult")
     fun insertArticles(list: List<Article>) {
-        Timber.d("Inserting in DB")
+        Timber.d("Inserting in DB...")
 
         Observable.fromCallable { articleDao.insertAll(list) }
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .subscribe {
-                Timber.d("Inserted ${list.size} articles in DB...")
-            }
+            .subscribe(
+                {
+                    Timber.d("Inserted ${list.size} articles in DB...")
+                },
+                {
+                    Timber.d("Error Inserting articles in DB.......${it.localizedMessage}")
+                }
+            )
 
+    }
+
+    suspend fun getArticle(articleId: String): Article {
+        return articleDao.getArticle(articleId)
     }
 
 }

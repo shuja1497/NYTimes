@@ -1,6 +1,7 @@
 package com.droidco.nytimes.utils
 
 import android.graphics.drawable.Drawable
+import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -39,16 +40,4 @@ fun setText(textView: TextView, text: String?) {
     } else {
         textView.visibility = View.GONE
     }
-}
-
-@BindingAdapter("app:setHtmlText")
-fun setHtmlText(textView: TextView, text: String) {
-
-    if (Utility.isStringValid(text)) {
-        textView.visibility = View.VISIBLE
-    } else {
-        textView.visibility = View.GONE
-        return
-    }
-    textView.text = HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
 }
