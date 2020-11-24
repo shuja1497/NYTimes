@@ -5,6 +5,7 @@ import com.droidco.nytimes.model.local.ArticlesLocalDataSource
 import com.droidco.nytimes.model.remote.ArticlesRemoteDataSource
 import io.reactivex.Observable
 import timber.log.Timber
+import java.util.*
 
 class ArticlesRepository() {
 
@@ -31,8 +32,11 @@ class ArticlesRepository() {
             }
             .doOnNext {
                 Timber.d("Fetched ${it.size} articles from API...")
+                it.forEach {article ->
+                    article.section = section.toLowerCase(Locale.ROOT)
+                }
 
-                storeArticlesLocally(it.filter { article -> article.getArticleId() != null })
+                storeArticlesLocally(it)
             }
     }
 

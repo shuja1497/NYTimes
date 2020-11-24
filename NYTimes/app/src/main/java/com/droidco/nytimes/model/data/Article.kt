@@ -23,7 +23,7 @@ data class Article(
     val description: String,
 
     @SerializedName("section")
-    val section: String,
+    var section: String,
 
     @SerializedName("published_date")
     val publishedDate: String,
