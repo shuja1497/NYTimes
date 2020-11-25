@@ -46,9 +46,8 @@ class ArticleDetailsFragment : BaseFragment() {
         articleDetailFragmentComponent.inject(this)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val articleId = args.articleId
 
         Timber.d("ARTICLE ID >>> $articleId")

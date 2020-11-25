@@ -55,17 +55,24 @@ class ArticlesListFragment : BaseFragment() {
         Timber.d("onCreate: SECTION: $section")
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         Timber.d("onActivityCreated: SECTION: $section")
-
         setupUI()
         getArticlesData()
+
+        binding.refreshLayout.setOnRefreshListener {
+
+            getArticlesData()
+            binding.refreshLayout.isRefreshing = false
+        }
     }
 
     private fun getArticlesData() {
-        binding.progressBar.visibility = View.VISIBLE
+
+        if (adapter.itemCount <= 0) {
+            binding.progressBar.visibility = View.VISIBLE
+        }
 
         subscribe(
             viewModel.getArticles(section)
