@@ -2,13 +2,11 @@ package com.droidco.nytimes.model.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(primaryKeys = ["article_id", "section"])
 data class Article(
 
-    @PrimaryKey
     @ColumnInfo(name = "article_id")
     @SerializedName("short_url")
     val url: String,
@@ -43,10 +41,10 @@ data class Article(
         return multimediaResp?.url
     }
 
-    fun getArticleId () : String {
+    fun getArticleId(): String {
         return this.url
     }
- }
+}
 
 data class Multimedia(
     val url: String,

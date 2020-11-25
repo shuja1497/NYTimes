@@ -63,19 +63,19 @@ class ArticlesListFragment : BaseFragment() {
 
         binding.refreshLayout.setOnRefreshListener {
 
-            getArticlesData()
+            getArticlesData(true)
             binding.refreshLayout.isRefreshing = false
         }
     }
 
-    private fun getArticlesData() {
+    private fun getArticlesData(refreshCall: Boolean = false) {
 
         if (adapter.itemCount <= 0) {
             binding.progressBar.visibility = View.VISIBLE
         }
 
         subscribe(
-            viewModel.getArticles(section)
+            viewModel.getArticles(section, refreshCall)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

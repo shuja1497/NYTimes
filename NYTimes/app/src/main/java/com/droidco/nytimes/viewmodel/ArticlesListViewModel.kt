@@ -23,9 +23,9 @@ class ArticlesListViewModel @Inject constructor(private val articlesRepository: 
     private val _error = MutableLiveData<Boolean>()
     val error: LiveData<Boolean> = _error
 
-    fun getArticles(section: String): Observable<ArticleResponse> {
+    fun getArticles(section: String, refreshCall: Boolean): Observable<ArticleResponse> {
 
-        return articlesRepository.fetchArticles(section)
+        return articlesRepository.fetchArticles(section, refreshCall)
             .map {
                 Timber.d("Mapping users to data...${it.size}")
                 ArticleResponse(it, "Top 10 Users")

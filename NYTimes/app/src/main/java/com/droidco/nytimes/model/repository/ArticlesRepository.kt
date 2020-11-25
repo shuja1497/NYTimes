@@ -15,7 +15,12 @@ class ArticlesRepository @Inject constructor(
     private val remoteDataSource: ArticlesRemoteDataSource
 ) {
 
-    fun fetchArticles(section: String): Observable<List<Article>> {
+    fun fetchArticles(section: String, refreshCall: Boolean): Observable<List<Article>> {
+
+        if (refreshCall) {
+            return fetchRemoteArticles(section)
+        }
+
         return Observable.concatArray(
             fetchLocalArticles(section),
             fetchRemoteArticles(section)
@@ -50,7 +55,7 @@ class ArticlesRepository @Inject constructor(
         localDataSource.insertArticles(articles)
     }
 
-    suspend fun getArticleById(articleId: String) : Article {
+    suspend fun getArticleById(articleId: String): Article {
         return localDataSource.getArticle(articleId)
     }
 }

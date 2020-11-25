@@ -9,7 +9,7 @@ import com.droidco.nytimes.model.data.Article
 import com.droidco.nytimes.utils.DATABASE_NAME
 
 @TypeConverters(DataConverter::class)
-@Database(entities = [Article::class], version = 4)
+@Database(entities = [Article::class], version = 5)
 abstract class ArticleDatabase : RoomDatabase() {
 
     abstract fun articleDao(): ArticleDao
