@@ -14,5 +14,7 @@ interface ApplicationComponent {
 
     fun articleListComponent(): ArticleListFragmentComponent.Factory
 
+    fun articleDetailComponent(): ArticleDetailFragmentComponent.Factory
+
 //    fun inject(articlesListFragment: ArticlesListFragment)
 }
