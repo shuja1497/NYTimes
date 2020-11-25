@@ -9,22 +9,24 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidco.nytimes.R
 import com.droidco.nytimes.databinding.ArticlesListFragmentBinding
+import com.droidco.nytimes.di.component.ArticleListFragmentComponent
+import com.droidco.nytimes.init.ApplicationController
 import com.droidco.nytimes.model.data.ArticleResponse
-import com.droidco.nytimes.model.repository.ArticlesRepository
 import com.droidco.nytimes.viewmodel.ArticlesListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.net.ConnectException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
 class ArticlesListFragment : BaseFragment() {
 
-    companion object {
-        fun newInstance() = ArticlesListFragment()
-    }
+    lateinit var articleListFragmentComponent: ArticleListFragmentComponent
 
-    private var viewModel = ArticlesListViewModel(ArticlesRepository())
+    @Inject
+    lateinit var viewModel: ArticlesListViewModel
+
     private val args: ArticlesListFragmentArgs by navArgs()
     private var section: String = ""
     private val adapter = ArticleAdapter(arrayListOf())
@@ -38,11 +40,17 @@ class ArticlesListFragment : BaseFragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.articles_list_fragment, container, false
         )
+
         return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        articleListFragmentComponent =
+            ApplicationController.getAppComponent().articleListComponent().create()
+        articleListFragmentComponent.inject(this)
+
         section = args.section
         Timber.d("onCreate: SECTION: $section")
     }

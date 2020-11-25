@@ -1,27 +1,13 @@
 package com.droidco.nytimes.model.remote
 
-import com.droidco.nytimes.model.data.Article
 import com.droidco.nytimes.model.data.ArticlesResponse
 import com.droidco.nytimes.utils.API_KEY
 import io.reactivex.Observable
-import io.reactivex.Single
+import javax.inject.Inject
 
-object ArticlesRemoteDataSource {
-
-    private var service: ArticlesService? = null
-
-    private fun getService(): ArticlesService {
-        if (service == null) {
-            synchronized(ArticlesService::class.java) {
-                if (service == null) {
-                    service = ApiClient.getService(ArticlesService::class.java)
-                }
-            }
-        }
-        return service!!
-    }
+class ArticlesRemoteDataSource @Inject constructor(private val articleApiService: ArticlesService) {
 
     fun getArticles(section: String): Observable<ArticlesResponse> {
-        return getService().getArticles(section, API_KEY)
+        return articleApiService.getArticles(section, API_KEY)
     }
 }

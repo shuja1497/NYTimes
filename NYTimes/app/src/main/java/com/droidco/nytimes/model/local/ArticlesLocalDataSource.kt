@@ -2,14 +2,15 @@ package com.droidco.nytimes.model.local
 
 import android.annotation.SuppressLint
 import com.droidco.nytimes.model.data.Article
-import com.droidco.nytimes.utils.ApplicationController
+import com.droidco.nytimes.init.ApplicationController
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-object ArticlesLocalDataSource {
+class ArticlesLocalDataSource @Inject constructor() {
 
     private var articleDao: ArticleDao =
         ArticleDatabase(ApplicationController.instance).articleDao()

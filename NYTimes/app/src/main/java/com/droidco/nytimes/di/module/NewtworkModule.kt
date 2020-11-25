@@ -1,13 +1,18 @@
-package com.droidco.nytimes.model.remote
+package com.droidco.nytimes.di.module
 
+import com.droidco.nytimes.di.ApplicationScope
+import com.droidco.nytimes.model.remote.ArticlesService
 import com.droidco.nytimes.utils.BASE_URL
+import dagger.Module
+import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-object ApiClient {
+@Module
+class NetworkModule {
 
     private val builder = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -22,9 +27,10 @@ object ApiClient {
         }
     }
 
-    fun <S> getService(
-        serviceClass: Class<S>
-    ): S {
+    @ApplicationScope
+    @Provides
+    fun provideArticleApiService(
+    ): ArticlesService {
 
         if (!httpClient.interceptors().contains(
                 logging
@@ -39,6 +45,6 @@ object ApiClient {
             retrofit = builder.build()
         }
 
-        return retrofit.create(serviceClass)
+        return retrofit.create(ArticlesService::class.java)
     }
 }
